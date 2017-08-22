@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import numpy as np
 
 
 def make_histogram(feature, num_bins=50):
@@ -79,3 +79,6 @@ if __name__ == '__main__':
     # What would be some interesting labels?
     print persons.INJ_SEV.value_counts()
     print vehicles.DEFORMED.value_counts()
+
+    # I'll go with injury severity. What's the dumbest, baseline average?
+    print np.mean(persons.INJ_SEV)
