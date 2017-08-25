@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from capstone_salad import cols_not_shared, rf_model_pipeline, max_by_group, mean_by_group, min_by_group
 
 pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', 100)
+pd.set_option('display.max_rows', 20)
 
 # Loading the first set of CSVs
 accidents = pd.read_csv('/Users/CamillaNawaz/Google Drive/Galvanize/dsi-capstone-camilla/FARS2015NationalCSV/accident.csv')
