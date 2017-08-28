@@ -8,11 +8,9 @@ def rf_model_pipeline(X_train, X_test, y_train, y_test):
     Takes in training and test data and builds a Random Forest Classifier.
     Returns the model itself as an object, and prints the top features in order of importance for further investigation.
     '''
-    my_forest = RandomForestClassifier()
+    my_forest = RandomForestClassifier(n_jobs=3)
     my_forest.fit(X_train, y_train)
     my_forest.predict_proba(X_train)
-    feature_importances = np.argsort(my_forest.feature_importances_)
-    print "top features:", list(X_train[feature_importances[-1::-1]])
     print my_forest.score(X_test, y_test)
     return my_forest
 
