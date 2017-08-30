@@ -27,5 +27,4 @@ NJ['day_of_month'] = NJ[3].str[3:5]
 
 NJ.to_csv('/Users/CamillaNawaz/Documents/Capstone_Data/NJ_2001_14/NJ_master.csv')
 
-# Create dummies for municipality and police department
-#dummies = pd.get_dummies(NJ, columns=[4, 7])
+pd.read_csv('/Users/CamillaNawaz/Documents/Capstone_Data/NJ_Occupants/occupants_subsample.csv'

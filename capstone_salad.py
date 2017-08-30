@@ -17,15 +17,15 @@ def rf_model_pipeline(X_train, X_test, y_train, y_test):
 
 def check_nan_numeric_shape_change(df):
     '''
-    Shows how much the shape of a DF changes based on
+    Shows how much the shape of a DF changes based on dropping NANs and object columns.
     '''
     df_shape = df.shape
-    nans_removed = df.dropna(inplace=True).shape
-    all_numeric_cols = df.select_dtypes(exclude=['object'])
-    return [df_shape, nans_removed, all_numeric_cols]
+    df_cut = drop_object_cols_and_NANs(df).shape
+    return [df_shape, df_cut]
 
 
 def drop_object_cols_and_NANs(df):
+    '''Takes a dataframe and drops columns that are objects and rows that contain missing values'''
     df.dropna(inplace=True)
     df = df.select_dtypes(exclude=['object'])
     return df
