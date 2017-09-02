@@ -14,8 +14,12 @@ def preprocess_NJ_accidents_cols(df):
     df[u'13'] = pd.factorize(df[u'13'])[0] # severity - don't include in models because of leaky
     df[u'4'] = pd.factorize(df[u'4'])[0] # day of week
     df['44'] = pd.factorize(df['44'])[0] # cell phone use
-    df['30'] = pd.factorize(df['30'])[0] # environmental conditions
+    df['30'] = pd.to_numeric(df['30'], errors='coerce')
+    df['snow_or_icy'] = df['30'].isin([3, 6, 7, 8])
+    df['rain'] = df['30'] == 2
+    df['hilly_road'] = df['27'].isin(['05', '06', '07', '08'])
     df['same_direction_crash'] = df['17'].isin(['01', '02'])
+    df['dark_no_street_lights'] = df['29'].isin(['04', '05'])
     df['right_angle_crash'] = df['17'] == '03'
     df['opposite_direction_crash'] = df['17'].isin(['04', '05'])
     df['overturn'] = df['17'] == '10'
@@ -45,8 +49,10 @@ def load_process_occupants_data(filename='/Users/CamillaNawaz/Documents/Capstone
 def engineer_features_NJ_occupants(df):
     df['ejection_bool'] = df['6'].isin(['03', '04', '02'])
     df['7'] = pd.to_numeric(df['7'], errors='coerce')
+    df['3'] = pd.to_numeric(df['3'], errors='coerce')
     df['minors_involved'] = df['7'] <= 18
     df['elderly_involved'] = df['7'] >= 62
+    df['teen_driver'] = df['7'].isin(range(15,19)) & df['3'] == 1
     return df
 
 
@@ -56,7 +62,7 @@ def prep_occupants_and_merge(df, other_df):
     Merges that info into the master table, NJ.
     '''
     agg = df.groupby('1')
-    occupants_maxed_group = agg[['minors_involved', 'elderly_involved', 'ejection_bool']].max()
+    occupants_maxed_group = agg[['minors_involved', 'elderly_involved', 'ejection_bool', 'teen_driver']].max()
     return pd.merge(other_df, occupants_maxed_group, left_on='0', right_index=True, how='left')
 
 
@@ -64,9 +70,11 @@ def load_process_vehicles_data(my_list, filename='/Users/CamillaNawaz/Documents/
     '''
     Iterate over a large csv and return the lines where the unique identifier matches the unique values in my_list.
     For use when opening the vehicles .csv file - but only the ones where it's a crash that's also in the subsample of NJ crash data (the accidents file).
-    '''
-    iter_csv = pd.read_csv(filename, iterator=True, chunksize=10000, header=None, quoting=csv.QUOTE_NONE, error_bad_lines=False)
+
+    iter_csv = pd.read_csv(filename, iterator=True, chunksize=1000, header=None, quoting=csv.QUOTE_NONE, error_bad_lines=False)
     NJ_vehicles = pd.concat([chunk[chunk[1].isin(my_list)] for chunk in iter_csv])
+    '''
+    NJ_vehicles = pd.read_csv(filename, header=None, quoting=csv.QUOTE_NONE, error_bad_lines=False)
     return NJ_vehicles
 
 
@@ -92,9 +100,9 @@ def prep_vehicles_and_merge(df, other_df):
     Creates an aggregate object and gets the features we want from it for the master table.
     Merges that info into the master table, NJ.
     '''
-    agg = df.groupby(1)
-    occupants_maxed_group = agg[['bus_or_truck', 'suv', 'passenger_or_cargo_van', 'passenger_vehicle', 'motorcycles']].max()
-    return pd.merge(other_df, occupants_maxed_group, left_on='0', right_index=True, how='left')
+    agg = df.groupby(2)
+    vehicles_maxed_group = agg[['bus_or_truck', 'suv', 'passenger_or_cargo_van', 'passenger_vehicle', 'motorcycles', 'improper_turning', 'wrong_way', 'unsafe_speed']].max()
+    return pd.merge(other_df, vehicles_maxed_group, left_on='0', right_index=True, how='left')
 
 
 
