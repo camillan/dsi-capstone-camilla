@@ -2,8 +2,9 @@ import pandas as pd
 import csv
 
 
-def load_NJ(filename='/Users/CamillaNawaz/Documents/Capstone_Data/NJ_2001_14/NJ_master_subsample.csv'):
-    NJ = pd.read_csv(filename, quoting=csv.QUOTE_NONE)
+def load_NJ(filename='/Users/CamillaNawaz/Documents/Capstone_Data/NJ_2001_14/NJ_master.csv'):
+    iter_csv = pd.read_csv(filename, iterator=True, chunksize=1000, quoting=csv.QUOTE_NONE, error_bad_lines=False)
+    NJ = pd.concat([chunk for chunk in iter_csv])
     return NJ
 
 
@@ -33,9 +34,10 @@ def preprocess_NJ_accidents_cols(df):
     return df
 
 
-def load_process_occupants_data(filename='/Users/CamillaNawaz/Documents/Capstone_Data/NJ_Occupants/occupants_subsample.csv'):
+def load_process_occupants_data(filename='/Users/CamillaNawaz/Documents/Capstone_Data/NJ_Occupants/NJ_occupants.csv'):
 
-    NJ_occupants = pd.read_csv(filename, error_bad_lines=False, dtype='object')
+    iter_csv = pd.read_csv(filename, iterator=True, chunksize=1000, quoting=csv.QUOTE_NONE, error_bad_lines=False)
+    NJ_occupants = pd.concat([chunk for chunk in iter_csv])
 
     my_cols = {'1':'case_num', '3':'vehicle_number', '3':'occupant_number', '4':'physical_condition', \
                 '5':'position_in_on_vehicle', '6':'ejection_code', '7':'age', '8':'sex', '9':'location_of_most_severe_injury', \
@@ -64,13 +66,11 @@ def prep_occupants_and_merge(df, other_df):
     Merges that info into the master table, NJ.
     '''
     agg = df.groupby('1')
-    occupants_maxed_group = agg[['ejection_bool', 'teen_driver', 'num_ppl_involved']].max()
-    occupants_sum_age_group = agg[['minors_involved', 'elderly_involved']].sum()
-    occupants_for_merge = pd.concat([occupants_maxed_group, occupants_sum_age_group], axis=1)
-    return pd.merge(other_df, occupants_for_merge, left_on='0', right_index=True, how='left')
+    occupants_maxed_group = agg[['minors_involved', 'elderly_involved', 'ejection_bool', 'teen_driver', 'num_ppl_involved']].max()
+    return pd.merge(other_df, occupants_maxed_group, left_on='0', right_index=True, how='left')
 
 
-def load_process_vehicles_data(my_list, filename='/Users/CamillaNawaz/Documents/Capstone_Data/NJ_Vehicles/NJ_vehicles_subsample.csv'):
+def load_process_vehicles_data(filename='/Users/CamillaNawaz/Documents/Capstone_Data/NJ_Vehicles/NJ_vehicles.csv'):
     '''
     Iterate over a large csv and return the lines where the unique identifier matches the unique values in my_list.
     For use when opening the vehicles .csv file - but only the ones where it's a crash that's also in the subsample of NJ crash data (the accidents file).
@@ -78,7 +78,8 @@ def load_process_vehicles_data(my_list, filename='/Users/CamillaNawaz/Documents/
     iter_csv = pd.read_csv(filename, iterator=True, chunksize=1000, header=None, quoting=csv.QUOTE_NONE, error_bad_lines=False)
     NJ_vehicles = pd.concat([chunk[chunk[1].isin(my_list)] for chunk in iter_csv])
     '''
-    NJ_vehicles = pd.read_csv(filename, header=None, quoting=csv.QUOTE_NONE, error_bad_lines=False)
+    iter_csv = pd.read_csv(filename, iterator=True, chunksize=10000, header=None, quoting=csv.QUOTE_NONE, error_bad_lines=False)
+    NJ_vehicles = pd.concat([chunk for chunk in iter_csv])
     return NJ_vehicles
 
 
@@ -96,6 +97,7 @@ def engineer_features_NJ_vehicles(df):
     df['improper_turning'] = df[23] == 8
     df['wrong_way'] = df[23] == 12
     df['unsafe_speed'] = df[23] == 1
+    print df
     return df
 
 
