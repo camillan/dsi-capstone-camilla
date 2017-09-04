@@ -1,11 +1,11 @@
 The problem/question:
 - Classify car crashes as involving injury or not
-- In a theoretical use case, an 911 dispatcher could use this model to inform their decision to send or not send emergency medical care.
-
+- In its real world use case, an 911 dispatcher could use this model to inform her decision to send or not send emergency medical care.
 
 
 Business understanding. On first guess, what would the features likely be?
 ** Given that you already know there's been a crash **
+
 Physical Impact Conditions:
 - Direction of the other vehicles
 - Where the impact was on body of car
@@ -16,22 +16,26 @@ Physical Impact Conditions:
 The Environment Conditions:
 - Deadly cliffs, mountains (bridges?)
 - Time of day
+- Day of week
 - Type of road
+- Weather
 - Atmospheric cover on the road
 
 Conditions About the Occupants:
 - Weight and age of people involved
-- Use of seatbelts
-- Pedestrians involved? yes or no
-- Trucks involved? yes or no
+- Use of seat belts
+- Pedestrians or cyclists involved?
+- Trucks involved?
 - Was there an illegal maneuver involved?
 
 Cars:
 - Vehicle safety rating
 
 
-
-Next steps:
-- Find or engineer those features in the dataset, bringing in more data.
-- Improve model accuracy.
-- Have outline for presentation on Friday.
+Objectives and process:
+- Engineer that data, aggregating by case number to gain additional insights than the raw data provides.
+- Drop the data that doesn't carry signal or improve the model.
+- Improve model accuracy by trying new features and continue to iterate to improve it.
+- Tweak parameters
+- Grid search for a more exhaustive exploration of parameters
+- Validate and consider other alternatives.

@@ -7,6 +7,14 @@ import csv
 from NJ_load_preprocess import *
 
 def rf_11(df):
+    '''
+    One last iteration of the model.
+    This is my FINAL VERSION.
+    Input: the New Jersey master dataframe as processed in NJ_load_preprocess
+    Output: RF object
+    Prints: the correlations of each of the features, the score of the model, and the features ranked by importance.
+    '''
+
     NJ_for_model = df[['involves_injury',\
     'ejection_bool', \
     'no_median_barrier', \
@@ -94,5 +102,6 @@ def main():
 
 if __name__ == '__main__':
     NJ = main()
+
     # Run the model
     rf_11_object = rf_11(NJ)
