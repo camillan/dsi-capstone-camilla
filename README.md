@@ -5,4 +5,7 @@
 
 
 ## The data
-From the latest FARS database, at https://crashstats.nhtsa.dot.gov/#/.
+From New Jersey state crash data.
+http://www.state.nj.us/transportation/refdata/accident/
+
+
