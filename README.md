@@ -1,18 +1,15 @@
-# dsi-capstone-camilla
-# Predicting car crash severity
+# Predicting Car Crash Severity for Emergency Vehicle Response
 
 
 ## Working repo for my Data Science Immersive capstone at Galvanize  |  Aug - Sept. 2017
-
 
 ## The data
 From New Jersey state crash data.
 http://www.state.nj.us/transportation/refdata/accident/
 
 
-## Capstone presentation 9/7/17
+#### Capstone presentation 9/7/17
 https://docs.google.com/presentation/d/1L-wzFSAEA7NZ9pj0hQhlBhd22jeJlCCqQHXwVjCY7Ig/edit?usp=sharing
-
 
 
 
