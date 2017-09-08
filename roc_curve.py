@@ -1,12 +1,12 @@
 from sklearn.metrics import roc_curve
-from capstone_salad import *
+from utils import *
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 import pandas as pd
 import matplotlib.pyplot as plt
 import csv
-from NJ_load_preprocess import *
+from process_data/NJ_load_preprocess import *
 
 
 def ROC_plot_on_final_model(df):
@@ -91,10 +91,6 @@ def ROC_plot_on_final_model(df):
     plt.plot([0, 1], [0, 1], 'k--')
     plt.show()
 
-    #print np.mean(scores)
-    #feature_importances = np.argsort(my_forest.feature_importances_)
-    #print "top features:", list(NJ_for_model.drop('involves_injury', axis=1).columns[feature_importances[::-1]])
-    #return my_forest
 
 
 

@@ -1,10 +1,10 @@
-from capstone_salad import *
+from utils import *
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 import pandas as pd
 import csv
-from NJ_load_preprocess import *
+from process_data/NJ_load_preprocess import *
 
 def rf_11(df):
     '''
